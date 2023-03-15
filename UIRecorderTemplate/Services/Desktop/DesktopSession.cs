@@ -50,7 +50,8 @@ namespace AutomationCLogic.Services
             {
                 FileName = pathWinAppDriver,
                 UseShellExecute = true,
-                Verb = "runas"
+                Verb = "runas",
+                CreateNoWindow = true,
             };
             Process.Start(processStartInfo);
             IntPtr appTopLevelWindowHandle = new IntPtr();
@@ -70,9 +71,7 @@ namespace AutomationCLogic.Services
             appCapabilities.AddAdditionalCapability("deviceName", @"WindowsPC");
             WindowsDriver<WindowsElement> appSession = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             appSession.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
-            // appSession.FindElementByXPath("/Pane[@ClassName=\"#32769\"][@Name=\"Desktop 1\"]/Window[@Name=\"infoplus ERP \"][@AutomationId=\"MainForm\"]/Window[@Name=\":: infoplus ERP :: Hộp tin nhắn\"][@AutomationId=\"MessageBoxNormal\"]/Pane[@Name=\"Đóng\"][@AutomationId=\"btn_OK\"]");
 
-          //  appSession.FindElementByXPath("/Window[@Name=\"infoplus ERP \"][@AutomationId=\"MainForm\"]/Window[@Name=\":: infoplus ERP :: Hộp tin nhắn\"][@AutomationId=\"MessageBoxNormal\"]");
 
             return appSession;
         }

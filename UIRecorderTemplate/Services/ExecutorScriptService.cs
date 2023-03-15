@@ -270,6 +270,9 @@ namespace AutomationCLogic
                         case nameof(Keys.Escape):
                             keySend = Keys.Escape;
                             break;
+                        case nameof(Keys.Enter):
+                            keySend = Keys.Enter;
+                            break;
                     }
 
                     if (!string.IsNullOrEmpty(keySend))
