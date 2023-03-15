@@ -50,7 +50,8 @@ namespace AutomationCLogic.Services
             {
                 FileName = pathWinAppDriver,
                 UseShellExecute = true,
-                Verb = "runas"
+                Verb = "runas",
+                CreateNoWindow = true,
             };
             Process.Start(processStartInfo);
             IntPtr appTopLevelWindowHandle = new IntPtr();
