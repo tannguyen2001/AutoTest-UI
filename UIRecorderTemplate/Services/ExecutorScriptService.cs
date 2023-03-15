@@ -65,13 +65,16 @@ namespace AutomationCLogic
         {
             foreach (var testCase in _testCaseStore.TestCases)
             {
+                int count = 0;
                 foreach (var testStep in testCase)
                 {
                     ExecuteTestStep(testStep);
                     testStepNumber++;
+                    count++;
                     worker.ReportProgress(testStepNumber);
                     if (!testStep.IsPassed)
                     {
+                        testStepNumber += (testCase.Count - count); 
                         break;
                     }
                 }
