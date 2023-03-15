@@ -74,10 +74,12 @@ namespace AutomationCLogic
                     worker.ReportProgress(testStepNumber);
                     if (!testStep.IsPassed)
                     {
-                        testStepNumber += (testCase.Count - count); 
+                        testStepNumber += (testCase.Count - count);
+                        worker.ReportProgress(testStepNumber);
                         break;
                     }
                 }
+                
                 ReturnToMenu();
             }
             ExportTestCaseResult();
