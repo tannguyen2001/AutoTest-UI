@@ -148,6 +148,7 @@ namespace AutomationCLogic
                 Stream streamOutput = File.Create(pathOutput);
                 excelPackage.SaveAs(streamOutput);
                 streamOutput.Close();
+
             }
 
             Console.WriteLine(sb.ToString());

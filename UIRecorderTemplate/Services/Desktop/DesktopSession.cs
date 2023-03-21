@@ -18,6 +18,7 @@ using System.IO;
 using OpenQA.Selenium.Interactions;
 using System.Windows.Forms;
 using System.Collections;
+using System.Threading;
 
 namespace AutomationCLogic.Services
 {
@@ -72,7 +73,6 @@ namespace AutomationCLogic.Services
             WindowsDriver<WindowsElement> appSession = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             appSession.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
 
-
             return appSession;
         }
         public WindowsDriver<WindowsElement> DesktopSessionElement
@@ -80,20 +80,6 @@ namespace AutomationCLogic.Services
             get { return desktopSession; }
         }
 
-        public WindowsElement FindElementById(string id)
-        {
-            try
-            {
-                return desktopSession.FindElementByAccessibilityId(id);
-            }
-                catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
-        }
-
-        // xử lý xpath
         private void FormatXPath(ref string xPath)
         {
             // cắt start xpath
@@ -127,34 +113,78 @@ namespace AutomationCLogic.Services
             }
         }
 
-        public WindowsElement FindElementByAbsoluteXPath(string xPath)
+
+        public WindowsElement FindElementById(string id, int n = 2)
         {
-            // xử lý xpath
-            FormatXPath(ref xPath);
-            try
+            WindowsElement windowElement = null;
+            while(n-- > 0)
             {
-                return desktopSession.FindElementByXPath(xPath);
+                try
+                {
+                    windowElement =  desktopSession.FindElementByAccessibilityId(id);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Thread.Sleep(3000);
+                }
+                if(windowElement != null)
+                {
+                    break;
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
+            return windowElement;
         }
 
-        public IList<WindowsElement> FindElementsByAbsoluteXPath(string xPath)
+        // xử lý xpath
+      
+        public WindowsElement FindElementByAbsoluteXPath(string xPath, int n = 2)
         {
             // xử lý xpath
             FormatXPath(ref xPath);
-            try
+            WindowsElement windowElement = null;
+            while(n-- > 0)
             {
-                return desktopSession.FindElementsByXPath(xPath);
+                try
+                {
+                    windowElement =  desktopSession.FindElementByXPath(xPath);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Thread.Sleep(3000);
+                }
+                if (windowElement != null)
+                {
+                    break;
+                }
+
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
+            return windowElement;
+
+        }
+
+        public IList<WindowsElement> FindElementsByAbsoluteXPath(string xPath, int n= 2)
+        {
+            // xử lý xpath
+            FormatXPath(ref xPath);
+            IList<WindowsElement> windowsElement = null;
+            while (n-- > 0){
+                try
+                {
+                    windowsElement = desktopSession.FindElementsByXPath(xPath);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Thread.Sleep(3000);
+                }
+                if (windowsElement != null)
+                {
+                    break;
+                }
             }
+            return windowsElement;
         }
     }
 }
