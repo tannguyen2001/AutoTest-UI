@@ -52,11 +52,15 @@ namespace AutomationCLogic
         public void ReturnToMenu()
         {
             var messageBox = _desktopSession.FindElementByAbsoluteXPath("/Pane[@ClassName=\"#32769\"][@Name=\"Desktop 1\"]/Window[@Name=\"infoplus ERP \"][@AutomationId=\"MainForm\"]/Window[@Name=\":: infoplus ERP :: Hộp tin nhắn\"][@AutomationId=\"MessageBoxNormal\"]");
-            var menu = _desktopSession.FindElementByAbsoluteXPath("/Pane[@ClassName=\"#32769\"][@Name=\"Desktop 1\"]/Window[@Name=\"infoplus ERP \"][@AutomationId=\"MainForm\"]/Pane[@AutomationId=\"RuntimeMainBoard\"]/Pane[starts-with(@ClassName,\"WindowsForms10\")]/Pane[starts-with(@ClassName,\"WindowsForms10\")]/Pane[starts-with(@ClassName,\"WindowsForms10\")]/Pane[@AutomationId=\"_SptContainer\"]/Pane[starts-with(@ClassName,\"WindowsForms10\")]/Pane[starts-with(@ClassName,\"WindowsForms10\")]/Pane[starts-with(@ClassName,\"WindowsForms10\")]");
-            if (messageBox != null)
+            while(messageBox != null)
             {
-                messageBox.SendKeys(Keys.Escape);
+                messageBox = _desktopSession.FindElementByAbsoluteXPath("/Pane[@ClassName=\"#32769\"][@Name=\"Desktop 1\"]/Window[@Name=\"infoplus ERP \"][@AutomationId=\"MainForm\"]/Window[@Name=\":: infoplus ERP :: Hộp tin nhắn\"][@AutomationId=\"MessageBoxNormal\"]");
+                if(messageBox != null)
+                {
+                    messageBox.SendKeys(Keys.Enter);
+                }
             }
+            var menu = _desktopSession.FindElementByAbsoluteXPath("/Pane[@ClassName=\"#32769\"][@Name=\"Desktop 1\"]/Window[@Name=\"infoplus ERP \"][@AutomationId=\"MainForm\"]/Pane[@AutomationId=\"RuntimeMainBoard\"]/Pane[starts-with(@ClassName,\"WindowsForms10\")]/Pane[starts-with(@ClassName,\"WindowsForms10\")]/Pane[starts-with(@ClassName,\"WindowsForms10\")]/Pane[@AutomationId=\"_SptContainer\"]/Pane[starts-with(@ClassName,\"WindowsForms10\")]/Pane[starts-with(@ClassName,\"WindowsForms10\")]/Pane[starts-with(@ClassName,\"WindowsForms10\")]");
             menu.SendKeys(Keys.Escape);
             menu.SendKeys(Keys.Escape);
             menu.SendKeys(Keys.Escape);
@@ -250,7 +254,10 @@ namespace AutomationCLogic
             }
             else if (testStep.InputParameter.ActionType == Enums.ActionType.PASTE)
             {
-                string inputValue = testStep.InputParameter.Value.ToString().Replace("\\t", "\t");
+                string inputValue = testStep.InputParameter.Value.ToString()
+                    .Replace("\\t", "\t")
+                    .Replace("\\r", "\r")
+                    .Replace("\\n", "\n");
                 CopyTextToClipboard(inputValue);
                 control = _controlFocus;
                 control.SendKeys(Keys.Control + "v");

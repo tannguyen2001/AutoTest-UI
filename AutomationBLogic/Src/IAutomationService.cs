@@ -9,10 +9,10 @@ namespace AutomationBService.Src
 {
     public interface IAutomationService
     {
-        Task SetupAutoTest();
+        void SetupAutoTest();
         void StartAutomationTest(ref int testStepNumber, BackgroundWorker worker);
-        Task ChangePathExcel(string path);
-        Task<Tuple<int, int>> GetDataProgressBar();
+        void ChangePathExcel(string path);
+        Tuple<int, int> GetDataProgressBar();
         int GetStepNumberValue();
     }
 }

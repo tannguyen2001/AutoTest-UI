@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.XPath;
 using AutomationCLogic.AutomationLogic;
 
 namespace AutomationBService.Src
@@ -14,12 +15,12 @@ namespace AutomationBService.Src
 
         public object dataProgressBar = new Object();
 
-        public async Task ChangePathExcel(string path)
+        public void ChangePathExcel(string path)
         {
             AutomationLogic.GetInstance().ChangePathExcelFile(path);
         }
 
-        public async Task<Tuple<int,int>> GetDataProgressBar()
+        public Tuple<int,int> GetDataProgressBar()
         {
             return new Tuple<int, int>(AutomationLogic.GetInstance().minStepProgress, AutomationLogic.GetInstance().maxStepProgress);
         }
@@ -29,10 +30,10 @@ namespace AutomationBService.Src
             return AutomationLogic.GetInstance().stepProgressing;
         }
 
-        public async Task SetupAutoTest()
+        public void SetupAutoTest()
         {
             AutomationLogic.GetInstance().SetupAutoTest();
-            dataProgressBar = await this.GetDataProgressBar();
+            dataProgressBar =  this.GetDataProgressBar();
         }
 
         public void StartAutomationTest(ref int testStepNumber, BackgroundWorker worker)
@@ -40,9 +41,6 @@ namespace AutomationBService.Src
             AutomationLogic.GetInstance().StartAutoTest(ref testStepNumber,  worker);
           
         }
-
-
-
 
     }
 }

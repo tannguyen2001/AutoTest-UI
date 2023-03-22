@@ -92,9 +92,5 @@ namespace AutomationCLogic.AutomationLogic
             _serviceProvider = serviceProvider.BuildServiceProvider();
         }
 
-        public void ChangePathSaveExport(string sSelectedPath)
-        {
-
-        }
     }
 }

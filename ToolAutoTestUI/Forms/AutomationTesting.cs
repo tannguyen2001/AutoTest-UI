@@ -61,15 +61,15 @@ namespace AutomationAUI
         }
 
 
-        private async void btnStartTesting_Click(object sender, EventArgs e)
+        private void btnStartTesting_Click(object sender, EventArgs e)
         {
             if (listPathExcelTest != null && listPathExcelTest.ToList().Count > 0)
             {
                 foreach (var pathItem in listPathExcelTest.ToList())
                 {
-                    await automationServices.ChangePathExcel(pathItem);
-                    await automationServices.SetupAutoTest();
-                    var dataProgress = await automationServices.GetDataProgressBar();
+                    automationServices.ChangePathExcel(pathItem);
+                    automationServices.SetupAutoTest();
+                    var dataProgress = automationServices.GetDataProgressBar();
                     progressBarTest.Value = 0;
                     int testStepNumber = 0;
                     progressBarTest.Minimum = dataProgress.Item1;
