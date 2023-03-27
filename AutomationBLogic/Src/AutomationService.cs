@@ -39,7 +39,6 @@ namespace AutomationBService.Src
         public void StartAutomationTest(ref int testStepNumber, BackgroundWorker worker)
         {
             AutomationLogic.GetInstance().StartAutoTest(ref testStepNumber,  worker);
-          
         }
 
     }

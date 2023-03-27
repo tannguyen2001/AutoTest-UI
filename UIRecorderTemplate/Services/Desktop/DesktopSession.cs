@@ -27,12 +27,10 @@ namespace AutomationCLogic.Services
         private const string WindowsApplicationDriverUrl = "http://127.0.0.1:4723/";
         WindowsDriver<WindowsElement> desktopSession;
         Dictionary<string,WindowsElement> controlUsed;
-        Dictionary<string, IList<WindowsElement>> listControlUsed;
 
         public DesktopSession()
         {
             controlUsed = new Dictionary<string, WindowsElement>();
-            listControlUsed = new Dictionary<string, IList<WindowsElement>>();
             desktopSession = CreateSessionForAlreadyRunningApp("InfoERPMain"); // InfoERPMain
         }
 
@@ -157,7 +155,7 @@ namespace AutomationCLogic.Services
             WindowsElement windowElement = null;
             if (controlUsed.ContainsKey(xPath))
             {
-               windowElement= controlUsed[xPath];
+               windowElement = controlUsed[xPath];
             }
             else
             {
@@ -172,7 +170,7 @@ namespace AutomationCLogic.Services
                         Console.WriteLine(ex.Message);
                         Thread.Sleep(3000);
                     }
-                    if (windowElement != null)
+                    if (windowElement != null && string.Compare("/Window[@Name=\"infoplus ERP \"][@AutomationId=\"MainForm\"]/Window[@Name=\":: infoplus ERP :: Hộp tin nhắn\"][@AutomationId=\"MessageBoxNormal\"]",xPath,true)!=0)
                     {
                         controlUsed.Add(xPath, windowElement);
                         break;
@@ -188,29 +186,22 @@ namespace AutomationCLogic.Services
             // xử lý xpath
             FormatXPath(ref xPath);
             IList<WindowsElement> windowsElement = null;
-            if(listControlUsed.ContainsKey(xPath))
+            while (n-- > 0)
             {
-                windowsElement = listControlUsed[xPath];
-            }
-            else
-            {
-                while (n-- > 0)
+                try
                 {
-                    try
-                    {
-                        windowsElement = desktopSession.FindElementsByXPath(xPath);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        Thread.Sleep(3000);
-                    }
-                    if (windowsElement != null)
-                    {
-                        listControlUsed.Add(xPath, windowsElement);
-                        break;
-                    }
+                    windowsElement = desktopSession.FindElementsByXPath(xPath);
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Thread.Sleep(3000);
+                }
+                if (windowsElement != null)
+                {
+                    break;
+                }
+                
             }
             return windowsElement;
         }

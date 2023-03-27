@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AutomationBService.Src;
 using ToolAutoTestUI.Resource;
+using System.Threading;
 
 namespace AutomationAUI
 {
@@ -65,6 +66,8 @@ namespace AutomationAUI
         {
             if (listPathExcelTest != null && listPathExcelTest.ToList().Count > 0)
             {
+                Semaphore semaphore = new Semaphore(1, 1); // Giá trị ban đầu là 1, chỉ cho phép một luồng truy cập vào phương thức
+
                 foreach (var pathItem in listPathExcelTest.ToList())
                 {
                     automationServices.ChangePathExcel(pathItem);
@@ -78,7 +81,9 @@ namespace AutomationAUI
                     worker.WorkerReportsProgress = true;
                     worker.DoWork += (senderr, ee) =>
                     {
-                        automationServices.StartAutomationTest(ref testStepNumber, worker); // Truyền đối tượng BackgroundWorker vào hàm StartAutomationTest
+                        semaphore.WaitOne(); // Chờ đến khi Semaphore được giải phóng
+                        automationServices.StartAutomationTest(ref testStepNumber, worker);
+                        semaphore.Release(); // Giải phóng Semaphore để cho phép một luồng khác truy cập vào phương thức
                         if (pathItem == listPathExcelTest[listPathExcelTest.Length - 1])
                         {
                             MessageBox.Show(TextMessage.AUTO_TEST_SUCCESS, TextMessage.NOTIFICATION, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2, MessageBoxOptions.ServiceNotification);
@@ -93,6 +98,7 @@ namespace AutomationAUI
                     };
                     worker.RunWorkerAsync();
                 }
+
             }
             else
             {

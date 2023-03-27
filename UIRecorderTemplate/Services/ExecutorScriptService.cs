@@ -214,11 +214,14 @@ namespace AutomationCLogic
                             {
                                 control2.Click();
                                 control2.SendKeys(Keys.Enter);
-                                testStep.IsPassed = true;
-                            }
-                            else if(control2.Text != testStep.InputParameter.Value.ToString())
-                            {
-                                testStep.IsPassed = false;
+                                if (control2.Text != testStep.InputParameter.Value.ToString())
+                                {
+                                    testStep.IsPassed = false;
+                                }
+                                else
+                                {
+                                    testStep.IsPassed = true;
+                                }
                             }
                         }
                         else if(testStep.ExpectedParameter.ExpectedSourceParam2 == Enums.PropertyType.Enable)
@@ -249,6 +252,7 @@ namespace AutomationCLogic
             else if (testStep.InputParameter.ActionType == Enums.ActionType.DELETE)
             {
                 control = _controlFocus;
+                control.Click();
                 control.SendKeys(Keys.Control + Keys.Delete);
                 testStep.IsPassed = true;
             }
@@ -260,7 +264,15 @@ namespace AutomationCLogic
                     .Replace("\\n", "\n");
                 CopyTextToClipboard(inputValue);
                 control = _controlFocus;
+                control.Click();
                 control.SendKeys(Keys.Control + "v");
+                testStep.IsPassed = true;
+            }
+            else if (testStep.InputParameter.ActionType == Enums.ActionType.DOUBLE_CLICK)
+            {
+                control = _controlFocus;
+                Actions action = new Actions(_desktopSession.DesktopSessionElement);
+                action.MoveToElement(control).DoubleClick().Build().Perform();
                 testStep.IsPassed = true;
             }
             else if (testStep.InputParameter.ActionType == Enums.ActionType.SEND_KEYS)
@@ -285,7 +297,8 @@ namespace AutomationCLogic
 
                     if (!string.IsNullOrEmpty(keySend))
                     {
-                        control.SendKeys(keySend);
+                        Actions action = new Actions(_desktopSession.DesktopSessionElement);
+                        action.MoveToElement(control).Click().SendKeys(keySend).Build().Perform();
                     }
                 }
                 else if (inputValue.StartsWith("$"))
@@ -314,7 +327,8 @@ namespace AutomationCLogic
                             {
                                 inputResult += random.Next(9);
                             }
-                            control.SendKeys(inputResult);
+                            Actions action = new Actions(_desktopSession.DesktopSessionElement);
+                            action.MoveToElement(control).Click().SendKeys(inputResult).Build().Perform();
                         }
                         else if(inputValue.Contains("string,"))
                         {
@@ -335,7 +349,8 @@ namespace AutomationCLogic
                             {
                                 inputResult += TEXT[random.Next(TEXT.Length - 1)];
                             }
-                            control.SendKeys(inputResult);
+                            Actions action = new Actions(_desktopSession.DesktopSessionElement);
+                            action.MoveToElement(control).Click().SendKeys(inputResult).Build().Perform();
                         }
                         else if (inputValue.Contains("decimal,")){
                             inputValue = inputValue.Replace("decimal,","");
@@ -361,16 +376,16 @@ namespace AutomationCLogic
                                 
                             }
                             string inputString = $"{numberString1},{numberString2}";
-                            control.SendKeys(inputString);
+                            Actions action = new Actions(_desktopSession.DesktopSessionElement);
+                            action.MoveToElement(control).Click().SendKeys(inputString).Build().Perform();
                         }
                     }
                 }
                 else
                 {
-                    control.Click();
-                    control.SendKeys(inputValue);
+                    Actions action = new Actions(_desktopSession.DesktopSessionElement);
+                    action.MoveToElement(control).Click().SendKeys(inputValue).Build().Perform();
                 }
-
                 testStep.IsPassed = true;
             }
             else if (testStep.InputParameter.ActionType == Enums.ActionType.CTRL_INSERT)
@@ -378,49 +393,6 @@ namespace AutomationCLogic
                 control.Click();
                 control.SendKeys(Keys.Control + Keys.Insert);
                 testStep.IsPassed = true;
-            }
-            else if (testStep.ExpectedParameter.ActionType == Enums.ActionType.QUERY_SQL)
-            {
-                // check sql
-                string sql = _resourceStore.ReplaceResourceValue(expectedSource).ToString();
-                var dtResult = _dapperContext.GetDataTableBySqlQuery(sql);
-                if (dtResult != null)
-                {
-                    testStep.ActualValue = dtResult;
-
-                    var dtExpected = _resourceStore.ReplaceResourceValue(testStep.ExpectedParameter.Value.ToString()
-                        .Replace("^", string.Empty).Replace("#", string.Empty)) as DataTable;
-
-                    // Kiểm tra số lượng dòng
-                    testStep.IsPassed = dtResult.Rows.Count == dtExpected.Rows.Count;
-                    // Kiểm tra nội dung
-                    if (testStep.IsPassed)
-                    {
-                        for (int i = 0; i < dtExpected.Rows.Count; i++)
-                        {
-                            foreach(DataColumn dc in dtExpected.Columns)
-                            {
-                                // Nếu không bao gồm cột
-                                if (!dtResult.Columns.Contains(dc.ColumnName))
-                                {
-                                    testStep.IsPassed = false;
-                                    return;
-                                }
-
-                                if (dtResult.Rows[i][dc.ColumnName].ToString() != dtExpected.Rows[i][dc.ColumnName].ToString())
-                                {
-                                    testStep.IsPassed = false;
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        testStep.IsPassed = false;
-                        return;
-                    }
-                }
             }
         }
     }

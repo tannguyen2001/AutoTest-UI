@@ -14,9 +14,10 @@ namespace AutomationCLogic.Enums
         SEND_KEYS,
         SELF_CHECK,
         WAIT_UNTIL,
-        QUERY_SQL,
         PASTE,
         CTRL_INSERT,
         DELETE,
+        DOUBLE_CLICK,
+        SAVE,
     }
 }
