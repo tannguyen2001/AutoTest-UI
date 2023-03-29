@@ -297,8 +297,8 @@ namespace AutomationCLogic
 
                     if (!string.IsNullOrEmpty(keySend))
                     {
-                        Actions action = new Actions(_desktopSession.DesktopSessionElement);
-                        action.MoveToElement(control).Click().SendKeys(keySend).Build().Perform();
+                        control.Click();
+                        control.SendKeys(keySend);
                     }
                 }
                 else if (inputValue.StartsWith("$"))
@@ -327,8 +327,8 @@ namespace AutomationCLogic
                             {
                                 inputResult += random.Next(9);
                             }
-                            Actions action = new Actions(_desktopSession.DesktopSessionElement);
-                            action.MoveToElement(control).Click().SendKeys(inputResult).Build().Perform();
+                            control.Click();
+                            control.SendKeys(inputResult);
                         }
                         else if(inputValue.Contains("string,"))
                         {
@@ -349,8 +349,8 @@ namespace AutomationCLogic
                             {
                                 inputResult += TEXT[random.Next(TEXT.Length - 1)];
                             }
-                            Actions action = new Actions(_desktopSession.DesktopSessionElement);
-                            action.MoveToElement(control).Click().SendKeys(inputResult).Build().Perform();
+                            control.Click();
+                            control.SendKeys(inputResult);
                         }
                         else if (inputValue.Contains("decimal,")){
                             inputValue = inputValue.Replace("decimal,","");
@@ -376,15 +376,15 @@ namespace AutomationCLogic
                                 
                             }
                             string inputString = $"{numberString1},{numberString2}";
-                            Actions action = new Actions(_desktopSession.DesktopSessionElement);
-                            action.MoveToElement(control).Click().SendKeys(inputString).Build().Perform();
+                            control.Click();
+                            control.SendKeys(inputString);
                         }
                     }
                 }
                 else
                 {
-                    Actions action = new Actions(_desktopSession.DesktopSessionElement);
-                    action.MoveToElement(control).Click().SendKeys(inputValue).Build().Perform();
+                    control.Click();
+                    control.SendKeys(inputValue);
                 }
                 testStep.IsPassed = true;
             }
