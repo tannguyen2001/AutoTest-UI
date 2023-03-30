@@ -73,7 +73,6 @@ namespace AutomationCLogic.Services
             WindowsDriver<WindowsElement> appSession = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             appSession.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
 
-
             return appSession;
         }
         public WindowsDriver<WindowsElement> DesktopSessionElement

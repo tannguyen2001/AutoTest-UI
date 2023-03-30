@@ -247,7 +247,19 @@ namespace AutomationCLogic
                 control = listControl[index - 1];
                 _controlFocus = listControl[index - 1];
                 control.Click();
-                testStep.IsPassed = true;
+
+                // Lấy phần tử đang được focus
+                WindowsElement focusedElement = (WindowsElement)_desktopSession.DesktopSessionElement.SwitchTo().ActiveElement();
+
+                // Kiểm tra xem phần tử đang được focus có phải là phần tử cần kiểm tra hay không
+                bool hasFocus = control.Equals(focusedElement);
+
+                if (hasFocus)
+                {
+                    testStep.IsPassed = true;
+                }
+
+                
             }
             else if (testStep.InputParameter.ActionType == Enums.ActionType.DELETE)
             {
