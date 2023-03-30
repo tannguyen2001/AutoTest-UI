@@ -26,11 +26,9 @@ namespace AutomationCLogic.Services
     {
         private const string WindowsApplicationDriverUrl = "http://127.0.0.1:4723/";
         WindowsDriver<WindowsElement> desktopSession;
-        Dictionary<string,WindowsElement> controlUsed;
 
         public DesktopSession()
         {
-            controlUsed = new Dictionary<string, WindowsElement>();
             desktopSession = CreateSessionForAlreadyRunningApp("InfoERPMain"); // InfoERPMain
         }
 
@@ -94,11 +92,11 @@ namespace AutomationCLogic.Services
             string errorXPath = "[@AutomationId=\"\"[Editor\"]";
             string errorXPath2 = "[@Name=\"&lt;&lt;\"]";
             string errorXpath3 = "[@AutomationId=\"_EmbeddableTextBox\"]";
-            int indexErrorXpathDataGrid = xPath.IndexOf("[position()=");
-            if (indexErrorXpathDataGrid > 0)
-            {
-                xPath = xPath.Remove(indexErrorXpathDataGrid, 14);
-            }
+            //  int indexErrorXpathDataGrid = xPath.IndexOf("[position()=");
+            //if (indexErrorXpathDataGrid > 0)
+            //{
+            //    xPath = xPath.Remove(indexErrorXpathDataGrid, 14);
+            //}
             if (xPath.Contains(errorXPath)) // nếu chứa đoạn lỗi
             {
                 // cắt
@@ -119,28 +117,20 @@ namespace AutomationCLogic.Services
         public WindowsElement FindElementById(string id, int n = 2)
         {
             WindowsElement windowElement = null;
-            if (controlUsed.ContainsKey(id))
+            while (n-- > 0)
             {
-                windowElement = controlUsed[id];
-            }
-            else
-            {
-                while (n-- > 0)
+                try
                 {
-                    try
-                    {
-                        windowElement = desktopSession.FindElementByAccessibilityId(id);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        Thread.Sleep(3000);
-                    }
-                    if (windowElement != null)
-                    {
-                        controlUsed.Add(id, windowElement);
-                        break;
-                    }
+                    windowElement = desktopSession.FindElementByAccessibilityId(id);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Thread.Sleep(3000);
+                }
+                if (windowElement != null)
+                {
+                    break;
                 }
             }
             return windowElement;
@@ -153,38 +143,38 @@ namespace AutomationCLogic.Services
             // xử lý xpath
             FormatXPath(ref xPath);
             WindowsElement windowElement = null;
-            if (controlUsed.ContainsKey(xPath))
+            while (n-- > 0)
             {
-               windowElement = controlUsed[xPath];
-            }
-            else
-            {
-                while (n-- > 0)
+                try
                 {
-                    try
-                    {
-                        windowElement = desktopSession.FindElementByXPath(xPath);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        Thread.Sleep(3000);
-                    }
-                    if (windowElement != null && string.Compare("/Window[@Name=\"infoplus ERP \"][@AutomationId=\"MainForm\"]/Window[@Name=\":: infoplus ERP :: Hộp tin nhắn\"][@AutomationId=\"MessageBoxNormal\"]",xPath,true)!=0)
-                    {
-                        controlUsed.Add(xPath, windowElement);
-                        break;
-                    }
+                    windowElement = desktopSession.FindElementByXPath(xPath);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Thread.Sleep(3000);
+                }
+                if (windowElement != null)
+                {
+                    break;
                 }
             }
             return windowElement;
 
         }
 
-        public IList<WindowsElement> FindElementsByAbsoluteXPath(string xPath, int n= 2)
+        public IList<WindowsElement> FindElementsByAbsoluteXPath(string xPath, int n= 2,bool index = false)
         {
             // xử lý xpath
             FormatXPath(ref xPath);
+            if (index)
+            {
+                int indexErrorXpathDataGrid = xPath.IndexOf("[position()=");
+                if (indexErrorXpathDataGrid > 0)
+                {
+                    xPath = xPath.Remove(indexErrorXpathDataGrid, 14);
+                }
+            }
             IList<WindowsElement> windowsElement = null;
             while (n-- > 0)
             {

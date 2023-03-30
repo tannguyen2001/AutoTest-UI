@@ -194,12 +194,12 @@ namespace AutomationCLogic
                 {
                     if (testStep.ExpectedParameter.ExpectedSourceParam1 == Enums.ExpectedSourceParamType.PROPERTY)
                     {
-                        if (testStep.ExpectedParameter.ExpectedSourceParam2 == Enums.PropertyType.Enable)
-                        {
-                            var controlEnable = control.Enabled;
+                        //if (testStep.ExpectedParameter.ExpectedSourceParam2 == Enums.PropertyType.ENABLED)
+                        //{
+                        //    var controlEnable = control.Enabled;
 
-                            testStep.ActualValue = controlEnable;
-                        }
+                        //    testStep.ActualValue = controlEnable;
+                        //}
                     }
                 }
                 else if (testStep.ExpectedParameter.ActionType == Enums.ActionType.WAIT_UNTIL)
@@ -224,12 +224,12 @@ namespace AutomationCLogic
                                 }
                             }
                         }
-                        else if(testStep.ExpectedParameter.ExpectedSourceParam2 == Enums.PropertyType.Enable)
+                        else if(testStep.ExpectedParameter.ExpectedSourceParam2 == Enums.PropertyType.APPEAR)
                         {
                             var control2 = _desktopSession.FindElementByAbsoluteXPath(testStep.ExpectedParameter.Source.ToString().Replace("\\", string.Empty).Trim().Trim('\"'));
-                            if(control2 == null)
+                            if(control2 != null)
                             {
-                                testStep.IsPassed = false;
+                                testStep.IsPassed = true;
                             }
                         }
                     }
@@ -242,12 +242,24 @@ namespace AutomationCLogic
             else if (testStep.InputParameter.ActionType == Enums.ActionType.CLICK_INDEX)
             {
                 var xpath = inputSource.Replace("\\", string.Empty).Trim().Trim('\"');
-                listControl = _desktopSession.FindElementsByAbsoluteXPath(xpath);
+                listControl = _desktopSession.FindElementsByAbsoluteXPath(xpath,2,true);
                 int index = int.Parse(testStep.InputParameter.Value.ToString());
                 control = listControl[index - 1];
                 _controlFocus = listControl[index - 1];
                 control.Click();
-                testStep.IsPassed = true;
+
+                // Lấy phần tử đang được focus
+                WindowsElement focusedElement = (WindowsElement)_desktopSession.DesktopSessionElement.SwitchTo().ActiveElement();
+
+                // Kiểm tra xem phần tử đang được focus có phải là phần tử cần kiểm tra hay không
+                bool hasFocus = control.Equals(focusedElement);
+
+                if (hasFocus)
+                {
+                    testStep.IsPassed = true;
+                }
+
+                
             }
             else if (testStep.InputParameter.ActionType == Enums.ActionType.DELETE)
             {
@@ -297,8 +309,8 @@ namespace AutomationCLogic
 
                     if (!string.IsNullOrEmpty(keySend))
                     {
-                        Actions action = new Actions(_desktopSession.DesktopSessionElement);
-                        action.MoveToElement(control).Click().SendKeys(keySend).Build().Perform();
+                        control.Click();
+                        control.SendKeys(keySend);
                     }
                 }
                 else if (inputValue.StartsWith("$"))
@@ -327,8 +339,8 @@ namespace AutomationCLogic
                             {
                                 inputResult += random.Next(9);
                             }
-                            Actions action = new Actions(_desktopSession.DesktopSessionElement);
-                            action.MoveToElement(control).Click().SendKeys(inputResult).Build().Perform();
+                            control.Click();
+                            control.SendKeys(inputResult);
                         }
                         else if(inputValue.Contains("string,"))
                         {
@@ -349,8 +361,8 @@ namespace AutomationCLogic
                             {
                                 inputResult += TEXT[random.Next(TEXT.Length - 1)];
                             }
-                            Actions action = new Actions(_desktopSession.DesktopSessionElement);
-                            action.MoveToElement(control).Click().SendKeys(inputResult).Build().Perform();
+                            control.Click();
+                            control.SendKeys(inputResult);
                         }
                         else if (inputValue.Contains("decimal,")){
                             inputValue = inputValue.Replace("decimal,","");
@@ -376,15 +388,15 @@ namespace AutomationCLogic
                                 
                             }
                             string inputString = $"{numberString1},{numberString2}";
-                            Actions action = new Actions(_desktopSession.DesktopSessionElement);
-                            action.MoveToElement(control).Click().SendKeys(inputString).Build().Perform();
+                            control.Click();
+                            control.SendKeys(inputString);
                         }
                     }
                 }
                 else
                 {
-                    Actions action = new Actions(_desktopSession.DesktopSessionElement);
-                    action.MoveToElement(control).Click().SendKeys(inputValue).Build().Perform();
+                    control.Click();
+                    control.SendKeys(inputValue);
                 }
                 testStep.IsPassed = true;
             }

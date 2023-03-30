@@ -9,7 +9,7 @@ namespace AutomationCLogic.Enums
     public enum PropertyType
     {
         NONE,
-        Enable,
+        APPEAR,
         TEXT
     }
 }
