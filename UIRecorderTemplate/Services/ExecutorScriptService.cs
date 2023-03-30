@@ -194,12 +194,12 @@ namespace AutomationCLogic
                 {
                     if (testStep.ExpectedParameter.ExpectedSourceParam1 == Enums.ExpectedSourceParamType.PROPERTY)
                     {
-                        if (testStep.ExpectedParameter.ExpectedSourceParam2 == Enums.PropertyType.Enable)
-                        {
-                            var controlEnable = control.Enabled;
+                        //if (testStep.ExpectedParameter.ExpectedSourceParam2 == Enums.PropertyType.ENABLED)
+                        //{
+                        //    var controlEnable = control.Enabled;
 
-                            testStep.ActualValue = controlEnable;
-                        }
+                        //    testStep.ActualValue = controlEnable;
+                        //}
                     }
                 }
                 else if (testStep.ExpectedParameter.ActionType == Enums.ActionType.WAIT_UNTIL)
@@ -224,12 +224,12 @@ namespace AutomationCLogic
                                 }
                             }
                         }
-                        else if(testStep.ExpectedParameter.ExpectedSourceParam2 == Enums.PropertyType.Enable)
+                        else if(testStep.ExpectedParameter.ExpectedSourceParam2 == Enums.PropertyType.APPEAR)
                         {
                             var control2 = _desktopSession.FindElementByAbsoluteXPath(testStep.ExpectedParameter.Source.ToString().Replace("\\", string.Empty).Trim().Trim('\"'));
-                            if(control2 == null)
+                            if(control2 != null)
                             {
-                                testStep.IsPassed = false;
+                                testStep.IsPassed = true;
                             }
                         }
                     }
@@ -242,7 +242,7 @@ namespace AutomationCLogic
             else if (testStep.InputParameter.ActionType == Enums.ActionType.CLICK_INDEX)
             {
                 var xpath = inputSource.Replace("\\", string.Empty).Trim().Trim('\"');
-                listControl = _desktopSession.FindElementsByAbsoluteXPath(xpath);
+                listControl = _desktopSession.FindElementsByAbsoluteXPath(xpath,2,true);
                 int index = int.Parse(testStep.InputParameter.Value.ToString());
                 control = listControl[index - 1];
                 _controlFocus = listControl[index - 1];
