@@ -68,10 +68,10 @@ namespace AutomationCLogic.Services
             var appTopLevelWindowHandleHex = appTopLevelWindowHandle.ToString("x"); //convert number to hex string
             var appCapabilities = new AppiumOptions();
             appCapabilities.AddAdditionalCapability("appTopLevelWindow", appTopLevelWindowHandleHex); // Root
+            appCapabilities.AddAdditionalCapability("appWorkingDir", "C:\\infoplus\\InfoERP"); // Root
             appCapabilities.AddAdditionalCapability("platformName", @"Windows");
             appCapabilities.AddAdditionalCapability("deviceName", @"WindowsPC");
             WindowsDriver<WindowsElement> appSession = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
-            appSession.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
 
             return appSession;
         }
@@ -92,11 +92,11 @@ namespace AutomationCLogic.Services
             string errorXPath = "[@AutomationId=\"\"[Editor\"]";
             string errorXPath2 = "[@Name=\"&lt;&lt;\"]";
             string errorXpath3 = "[@AutomationId=\"_EmbeddableTextBox\"]";
-            //  int indexErrorXpathDataGrid = xPath.IndexOf("[position()=");
-            //if (indexErrorXpathDataGrid > 0)
-            //{
-            //    xPath = xPath.Remove(indexErrorXpathDataGrid, 14);
-            //}
+            int indexErrorXpathDataGrid = xPath.IndexOf("[position()=");
+            if (indexErrorXpathDataGrid > 0)
+            {
+                xPath = xPath.Remove(indexErrorXpathDataGrid, 14);
+            }
             if (xPath.Contains(errorXPath)) // nếu chứa đoạn lỗi
             {
                 // cắt
@@ -167,14 +167,6 @@ namespace AutomationCLogic.Services
         {
             // xử lý xpath
             FormatXPath(ref xPath);
-            if (index)
-            {
-                int indexErrorXpathDataGrid = xPath.IndexOf("[position()=");
-                if (indexErrorXpathDataGrid > 0)
-                {
-                    xPath = xPath.Remove(indexErrorXpathDataGrid, 14);
-                }
-            }
             IList<WindowsElement> windowsElement = null;
             while (n-- > 0)
             {
