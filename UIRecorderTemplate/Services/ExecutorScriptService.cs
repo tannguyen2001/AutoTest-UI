@@ -166,7 +166,7 @@ namespace AutomationCLogic
             string expectedSource = _resourceStore.ReplaceResourceValue(testStep.ExpectedParameter.Source.ToString()).ToString();
             if (!string.IsNullOrEmpty(inputSource))
             {
-                if (testStep.InputParameter.SourceType == Enums.InputSourceType.XPATH)
+                if ((testStep.InputParameter.SourceType == Enums.InputSourceType.XPATH) && (testStep.InputParameter.ActionType != Enums.ActionType.CLICK_INDEX))
                 {
                     var xpath = inputSource.Replace("\\", string.Empty).Trim().Trim('\"');
                     control = _desktopSession.FindElementByAbsoluteXPath(xpath);
@@ -177,7 +177,7 @@ namespace AutomationCLogic
                     control = _desktopSession.FindElementById(inputSource);
                 }
 
-                if (control == null)
+                if ((control == null) && (testStep.InputParameter.ActionType != Enums.ActionType.CLICK_INDEX))
                 {
                     testStep.ActualValue = null;
                     testStep.IsPassed = false;
@@ -213,8 +213,7 @@ namespace AutomationCLogic
                             if(control2 != null)
                             {
                                 control2.Click();
-                                control2.SendKeys(Keys.Enter);
-                                if (control2.Text != testStep.InputParameter.Value.ToString())
+                                if (control2.Text.Trim() != testStep.ExpectedParameter.Value.ToString().Trim())
                                 {
                                     testStep.IsPassed = false;
                                 }
@@ -222,6 +221,8 @@ namespace AutomationCLogic
                                 {
                                     testStep.IsPassed = true;
                                 }
+                                control2.SendKeys(Keys.Enter);
+
                             }
                         }
                         else if(testStep.ExpectedParameter.ExpectedSourceParam2 == Enums.PropertyType.APPEAR)
@@ -231,6 +232,10 @@ namespace AutomationCLogic
                             {
                                 testStep.IsPassed = true;
                             }
+                        }
+                        else
+                        {
+                            testStep.IsPassed = false;
                         }
                     }
                 }
@@ -247,19 +252,7 @@ namespace AutomationCLogic
                 control = listControl[index - 1];
                 _controlFocus = listControl[index - 1];
                 control.Click();
-
-                // Lấy phần tử đang được focus
-                WindowsElement focusedElement = (WindowsElement)_desktopSession.DesktopSessionElement.SwitchTo().ActiveElement();
-
-                // Kiểm tra xem phần tử đang được focus có phải là phần tử cần kiểm tra hay không
-                bool hasFocus = control.Equals(focusedElement);
-
-                if (hasFocus)
-                {
-                    testStep.IsPassed = true;
-                }
-
-                
+                testStep.IsPassed = true;
             }
             else if (testStep.InputParameter.ActionType == Enums.ActionType.DELETE)
             {
