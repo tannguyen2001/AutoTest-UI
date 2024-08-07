@@ -102,9 +102,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AutomationBLogic\AutomationBService.csproj">
+    <ProjectReference Include="..\AutomationBLogic\AutomationService.csproj">
       <Project>{25e81a50-5be9-4f15-89e9-fc821b64da5d}</Project>
-      <Name>AutomationBService</Name>
+      <Name>AutomationService</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

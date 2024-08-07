@@ -56,9 +56,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UIRecorderTemplate\AutomationCLogic.csproj">
+    <ProjectReference Include="..\UIRecorderTemplate\AutomationLogic.csproj">
       <Project>{4cce44fd-c27a-4cea-a703-3775964ae1d4}</Project>
-      <Name>AutomationCLogic</Name>
+      <Name>AutomationLogic</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -10,11 +10,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinAppDriverUIRecorder", "U
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UIXPathLib", "UIXPathLib\UIXPathLib.vcxproj", "{074B6938-AF8C-4C61-9101-C9B11A6DB217}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationCLogic", "UIRecorderTemplate\AutomationCLogic.csproj", "{4CCE44FD-C27A-4CEA-A703-3775964AE1D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationLogic", "UIRecorderTemplate\AutomationLogic.csproj", "{4CCE44FD-C27A-4CEA-A703-3775964AE1D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationAUI", "ToolAutoTestUI\AutomationAUI.csproj", "{A5CF454C-5553-45BD-9D95-4B48A54CBB54}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationUI", "ToolAutoTestUI\AutomationUI.csproj", "{A5CF454C-5553-45BD-9D95-4B48A54CBB54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationBService", "AutomationBLogic\AutomationBService.csproj", "{25E81A50-5BE9-4F15-89E9-FC821B64DA5D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationService", "AutomationBLogic\AutomationService.csproj", "{25E81A50-5BE9-4F15-89E9-FC821B64DA5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
